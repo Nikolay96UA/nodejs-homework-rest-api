@@ -2,13 +2,11 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-// ? для отр даних з env, викл ->
 const dotenv = require("dotenv");
-// ? далі в нього викликаємо метод config()
 
 const contactsRouter = require("./routes/api/contacts");
 
-dotenv.config(); // ? він шукає файл .env і додає дані з нього
+dotenv.config();
 
 const app = express();
 
