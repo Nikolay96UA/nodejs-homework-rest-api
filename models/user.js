@@ -3,7 +3,7 @@ const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 
 // додаємо рег вираз з https://www.w3resource.com/javascript/form/email-validation.php
-const emailRegexp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
+const emailRegexp = /^\w+([/.-]?\w+)*@\w+([/.-]?\w+)*(\.\w{2,3})+$/;
 const subscriptionList = ["starter", "pro", "business"];
 
 // mongooseSchemas
@@ -34,6 +34,20 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+
+    avatarURL: {
+      type: String,
+      required: true,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: "",
+      // required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -45,6 +59,10 @@ const registerSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
   subscription: Joi.string().valid(...subscriptionList),
+});
+// * дод схему для повт відпр msg
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
 });
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
@@ -61,6 +79,7 @@ const schemas = {
   registerSchema,
   loginSchema,
   updateSubscrSchema,
+  emailSchema,
 };
 
 // model
